@@ -49,6 +49,10 @@ class QuestZonePage extends StatelessWidget {
                       const _ArchitectureLayerExplorer(),
                       const SizedBox(height: 28),
                     ],
+                    if (node.id == 'performance') ...[
+                      const _PerformanceForge(),
+                      const SizedBox(height: 28),
+                    ],
                     _ZoneGrid(content: content),
                   ],
                 ),
@@ -98,10 +102,12 @@ class _ZoneHero extends StatelessWidget {
       builder: (context, constraints) {
         final compact = constraints.maxWidth < 820;
         final titleSize = constraints.maxWidth < 460
-            ? 40.0
+            ? 38.0
             : compact
             ? 52.0
             : 64.0;
+        final titleHeight = constraints.maxWidth < 460 ? 1.02 : null;
+        final titleSpacing = constraints.maxWidth < 460 ? -1.6 : null;
 
         final intro = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,9 +123,11 @@ class _ZoneHero extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               content.headline,
-              style: Theme.of(
-                context,
-              ).textTheme.displayLarge?.copyWith(fontSize: titleSize),
+              style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                fontSize: titleSize,
+                height: titleHeight,
+                letterSpacing: titleSpacing,
+              ),
             ),
             const SizedBox(height: 16),
             Text(
@@ -440,6 +448,326 @@ class _LayerDetailCard extends StatelessWidget {
   }
 }
 
+class _PerformanceForge extends StatefulWidget {
+  const _PerformanceForge();
+
+  @override
+  State<_PerformanceForge> createState() => _PerformanceForgeState();
+}
+
+class _PerformanceForgeState extends State<_PerformanceForge> {
+  int _selectedIndex = 0;
+
+  static const _metrics = [
+    _PerformanceMetric(
+      label: '80% efficiency',
+      title: 'Legacy rebuild efficiency',
+      problem:
+          'Legacy resort operations depended on slow manual handoffs and brittle flows.',
+      optimization:
+          'Rebuilt critical journeys with clearer app flows, safer integration seams, and automated delivery feedback.',
+      impact: '80% process efficiency improvement in a production rebuild.',
+      progress: 0.80,
+      icon: Icons.flash_on,
+    ),
+    _PerformanceMetric(
+      label: '45% cost reduction',
+      title: 'Cost reduction engine',
+      problem:
+          'Production workflows carried avoidable operational and infrastructure waste.',
+      optimization:
+          'Optimized infrastructure, release automation, and data paths to remove waste from production workflows.',
+      impact: '45% operational cost reduction while improving release safety.',
+      progress: 0.45,
+      icon: Icons.savings,
+    ),
+    _PerformanceMetric(
+      label: '75% fewer Firebase reads',
+      title: 'Firebase read shield',
+      problem:
+          'Repeated Firebase reads increased latency, cost, and user-facing wait time.',
+      optimization:
+          'Added cache-aware data flows, tighter query boundaries, and state hydration to avoid redundant reads.',
+      impact:
+          '75% fewer redundant Firebase reads in MusicPlayce production flows.',
+      progress: 0.75,
+      icon: Icons.storage,
+    ),
+    _PerformanceMetric(
+      label: '50% query improvement',
+      title: 'Search query accelerator',
+      problem:
+          'Discovery and data-heavy screens needed faster lookups under real user behavior.',
+      optimization:
+          'Tuned query shape, search integration, and response handling around the highest-value paths.',
+      impact: '50% faster query experience for discovery-heavy product areas.',
+      progress: 0.50,
+      icon: Icons.manage_search,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedMetric = _metrics[_selectedIndex];
+
+    return _GlassCard(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final selector = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Interactive metric explorer',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Choose a proof point to inspect the problem, optimization, and impact behind the number.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, gridConstraints) {
+                  final cardWidth = gridConstraints.maxWidth < 620
+                      ? gridConstraints.maxWidth
+                      : (gridConstraints.maxWidth - 12) / 2;
+
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final metric in _metrics.indexed)
+                        SizedBox(
+                          width: cardWidth,
+                          child: _PerformanceMetricCard(
+                            metric: metric.$2,
+                            isSelected: metric.$1 == _selectedIndex,
+                            onTap: () =>
+                                setState(() => _selectedIndex = metric.$1),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          );
+
+          final detail = _PerformanceMetricDetail(metric: selectedMetric);
+
+          if (constraints.maxWidth < 900) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [selector, const SizedBox(height: 22), detail],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 5, child: selector),
+              const SizedBox(width: 24),
+              Expanded(flex: 4, child: detail),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _PerformanceMetricCard extends StatelessWidget {
+  const _PerformanceMetricCard({
+    required this.metric,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final _PerformanceMetric metric;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.plasmaPink.withValues(alpha: 0.18)
+            : AppColors.neonBlue.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.plasmaPink
+              : AppColors.neonCyan.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(metric.icon, color: AppColors.neonCyan),
+                const SizedBox(height: 14),
+                Text(
+                  metric.label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.starWhite),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  metric.title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.starWhite.withValues(alpha: 0.74),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PerformanceMetricDetail extends StatelessWidget {
+  const _PerformanceMetricDetail({required this.metric});
+
+  final _PerformanceMetric metric;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      child: DecoratedBox(
+        key: ValueKey(metric.label),
+        decoration: BoxDecoration(
+          color: AppColors.neonBlue.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppColors.plasmaPink.withValues(alpha: 0.2),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(metric.title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 18),
+              _PerformanceEnergyBar(progress: metric.progress),
+              const SizedBox(height: 20),
+              _PerformanceProofBlock(title: 'Problem', body: metric.problem),
+              _PerformanceProofBlock(
+                title: 'Optimization',
+                body: metric.optimization,
+              ),
+              _PerformanceProofBlock(title: 'Impact', body: metric.impact),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PerformanceEnergyBar extends StatelessWidget {
+  const _PerformanceEnergyBar({required this.progress});
+
+  final double progress;
+
+  @override
+  Widget build(BuildContext context) {
+    final percentage = (progress * 100).round();
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: progress),
+      duration: const Duration(milliseconds: 650),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Energy output',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const Spacer(),
+                Text(
+                  '$percentage%',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.neonCyan,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: ColoredBox(
+                color: AppColors.deepSpace.withValues(alpha: 0.72),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: FractionallySizedBox(
+                    widthFactor: value.clamp(0, 1),
+                    child: const SizedBox(
+                      height: 14,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppColors.neonCyan, AppColors.plasmaPink],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _PerformanceProofBlock extends StatelessWidget {
+  const _PerformanceProofBlock({required this.title, required this.body});
+
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 14),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.labelLarge?.copyWith(
+              color: AppColors.neonCyan,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(body, style: Theme.of(context).textTheme.bodyMedium),
+        ],
+      ),
+    );
+  }
+}
+
 class _ZoneSectionCard extends StatelessWidget {
   const _ZoneSectionCard({
     required this.index,
@@ -575,6 +903,26 @@ class _ArchitectureLayer {
   final List<String> responsibilities;
 }
 
+class _PerformanceMetric {
+  const _PerformanceMetric({
+    required this.label,
+    required this.title,
+    required this.problem,
+    required this.optimization,
+    required this.impact,
+    required this.progress,
+    required this.icon,
+  });
+
+  final String label;
+  final String title;
+  final String problem;
+  final String optimization;
+  final String impact;
+  final double progress;
+  final IconData icon;
+}
+
 _ZoneContent _contentFor(QuestNode node) {
   return switch (node.id) {
     'architecture' => const _ZoneContent(
@@ -615,6 +963,7 @@ _ZoneContent _contentFor(QuestNode node) {
         '80% process efficiency improvement in a legacy rebuild.',
         '45% operational cost reduction on production systems.',
         '75% fewer redundant Firebase reads at MusicPlayce.',
+        '50% query improvement for discovery-heavy product paths.',
       ],
       sections: [
         _ZoneSection(

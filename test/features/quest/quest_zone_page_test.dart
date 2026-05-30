@@ -90,6 +90,47 @@ void main() {
       expect(find.text('Rendering discipline'), findsOneWidget);
     });
 
+    testWidgets('renders interactive performance metric explorer', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('performance'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Interactive metric explorer'), findsOneWidget);
+      expect(find.text('80% efficiency'), findsOneWidget);
+      expect(find.text('45% cost reduction'), findsOneWidget);
+      expect(find.text('75% fewer Firebase reads'), findsOneWidget);
+      expect(find.text('50% query improvement'), findsOneWidget);
+      expect(find.text('Problem'), findsOneWidget);
+      expect(find.text('Optimization'), findsOneWidget);
+      expect(find.text('Impact'), findsOneWidget);
+    });
+
+    testWidgets('selecting a performance metric updates details', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('performance'));
+      await tester.pump(const Duration(seconds: 1));
+
+      await tester.ensureVisible(find.text('45% cost reduction'));
+      await tester.pump();
+      await tester.tap(find.text('45% cost reduction'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        find.text(
+          'Optimized infrastructure, release automation, and data paths to remove waste from production workflows.',
+        ),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('Back to Quest navigates home', (tester) async {
       await tester.pumpWidget(buildSubject('architecture'));
       await tester.pump(const Duration(seconds: 1));
