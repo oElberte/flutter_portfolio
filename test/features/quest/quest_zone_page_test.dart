@@ -179,6 +179,61 @@ void main() {
       expect(find.textContaining('50% query improvement'), findsOneWidget);
     });
 
+    testWidgets('renders case study zone content', (tester) async {
+      await tester.pumpWidget(buildSubject('case-study'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Boss Room Zone'), findsOneWidget);
+      expect(
+        find.text(
+          'The boss room: specialist-level reasoning under constraints.',
+        ),
+        findsOneWidget,
+      );
+      expect(find.text('Technical judgment'), findsOneWidget);
+      expect(find.text('Business impact'), findsOneWidget);
+      expect(find.text('Leadership'), findsOneWidget);
+    });
+
+    testWidgets('renders interactive Boss Room battle', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('case-study'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Interactive boss battle'), findsOneWidget);
+      expect(find.text('Architecture gauntlet'), findsOneWidget);
+      expect(find.text('Legacy rebuild'), findsOneWidget);
+      expect(find.text('Firebase read shield'), findsOneWidget);
+      expect(find.text('Commerce AI phase'), findsOneWidget);
+      expect(find.text('Leadership phase'), findsOneWidget);
+      expect(find.text('Constraint'), findsOneWidget);
+      expect(find.text('Countermove'), findsOneWidget);
+      expect(find.text('Victory proof'), findsOneWidget);
+    });
+
+    testWidgets('selecting a boss challenge updates details', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('case-study'));
+      await tester.pump(const Duration(seconds: 1));
+
+      await tester.ensureVisible(find.text('Commerce AI phase'));
+      await tester.pump();
+      await tester.tap(find.text('Commerce AI phase'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(
+        find.textContaining('50% query performance improvement'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('30% storage cost reduction'), findsOneWidget);
+      expect(find.textContaining('15%+ sales lift'), findsOneWidget);
+      expect(find.textContaining('20% cost reduction'), findsOneWidget);
+    });
+
     testWidgets('Back to Quest navigates home', (tester) async {
       await tester.pumpWidget(buildSubject('architecture'));
       await tester.pump(const Duration(seconds: 1));

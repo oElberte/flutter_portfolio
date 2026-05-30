@@ -57,6 +57,10 @@ class QuestZonePage extends StatelessWidget {
                       const _AiMotionPortal(),
                       const SizedBox(height: 28),
                     ],
+                    if (node.id == 'case-study') ...[
+                      const _BossRoomBattle(),
+                      const SizedBox(height: 28),
+                    ],
                     _ZoneGrid(content: content),
                   ],
                 ),
@@ -1037,6 +1041,313 @@ class _PortalPulseTrack extends StatelessWidget {
   }
 }
 
+class _BossRoomBattle extends StatefulWidget {
+  const _BossRoomBattle();
+
+  @override
+  State<_BossRoomBattle> createState() => _BossRoomBattleState();
+}
+
+class _BossRoomBattleState extends State<_BossRoomBattle> {
+  int _selectedIndex = 0;
+
+  static const _challenges = [
+    _BossChallenge(
+      label: 'Architecture gauntlet',
+      title: 'System design gauntlet',
+      constraint:
+          'High-scale Flutter apps need clean boundaries, predictable state, native seams, and testable delivery paths.',
+      countermove:
+          'Clean Architecture, BLoC/Cubit, typed domain/data/presentation boundaries, and mentoring-friendly module conventions.',
+      proof:
+          'Flutter Specialist and Mobile Architect experience across production apps, team guidance, CI/CD, and reusable architecture practices.',
+      power: 0.90,
+      icon: Icons.workspace_premium,
+    ),
+    _BossChallenge(
+      label: 'Legacy rebuild',
+      title: 'Resort platform rebuild',
+      constraint:
+          'GAV Resorts had legacy flows plus distributed Nest.js and Go service integration pressure.',
+      countermove:
+          'Strengthened Flutter architecture, service contracts, automated tests, GitHub Actions, Codemagic, and Pulumi delivery paths.',
+      proof:
+          '80% process efficiency improvement and 45% operational cost reduction from the production rebuild.',
+      power: 0.88,
+      icon: Icons.construction,
+    ),
+    _BossChallenge(
+      label: 'Firebase read shield',
+      title: 'MusicPlayce data shield',
+      constraint:
+          'MusicPlayce needed lower Firebase usage, stronger discovery, and better engagement without slowing product work.',
+      countermove:
+          'HydratedBLoC persistence, cache-aware state, Algolia search, Branch.io deep links, and cleaner communication flows.',
+      proof:
+          '75% fewer redundant Firebase reads and a 23% engagement boost in production discovery flows.',
+      power: 0.82,
+      icon: Icons.storage,
+    ),
+    _BossChallenge(
+      label: 'Commerce AI phase',
+      title: 'AI commerce final phase',
+      constraint:
+          'Zellor AI needed faster data access, lower storage costs, AI suggestions, and stronger commerce outcomes.',
+      countermove:
+          'Database and back-end migration, AI/LLM integrations, Shopify portal work, and optimized embeddable product carousels.',
+      proof:
+          '50% query performance improvement, 30% storage cost reduction, 15%+ sales lift, and 20% cost reduction.',
+      power: 0.92,
+      icon: Icons.auto_awesome,
+    ),
+    _BossChallenge(
+      label: 'Leadership phase',
+      title: 'Team impact phase',
+      constraint:
+          'Teams need quality, review discipline, release confidence, and scalable conventions under delivery pressure.',
+      countermove:
+          'Architecture guidance, mentoring, testing strategy, CI/CD improvements, and clean code practices.',
+      proof:
+          'Salsa high-scale Flutter and AI work plus Farsoft CRM/ERP migration experience show delivery beyond isolated tickets.',
+      power: 0.86,
+      icon: Icons.groups,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedChallenge = _challenges[_selectedIndex];
+
+    return _GlassCard(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final selector = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Interactive boss battle',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Pick a challenge to see the constraint, countermove, and proof that clears the final portfolio room.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, gridConstraints) {
+                  final cardWidth = gridConstraints.maxWidth < 620
+                      ? gridConstraints.maxWidth
+                      : (gridConstraints.maxWidth - 12) / 2;
+
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final challenge in _challenges.indexed)
+                        SizedBox(
+                          width: cardWidth,
+                          child: _BossChallengeCard(
+                            challenge: challenge.$2,
+                            isSelected: challenge.$1 == _selectedIndex,
+                            onTap: () =>
+                                setState(() => _selectedIndex = challenge.$1),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          );
+
+          final detail = _BossChallengeDetail(challenge: selectedChallenge);
+
+          if (constraints.maxWidth < 900) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [selector, const SizedBox(height: 22), detail],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 5, child: selector),
+              const SizedBox(width: 24),
+              Expanded(flex: 4, child: detail),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _BossChallengeCard extends StatelessWidget {
+  const _BossChallengeCard({
+    required this.challenge,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final _BossChallenge challenge;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.plasmaPink.withValues(alpha: 0.18)
+            : AppColors.neonBlue.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.plasmaPink
+              : AppColors.neonCyan.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(challenge.icon, color: AppColors.neonCyan),
+                const SizedBox(height: 14),
+                Text(
+                  challenge.label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.starWhite),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  challenge.title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.starWhite.withValues(alpha: 0.74),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BossChallengeDetail extends StatelessWidget {
+  const _BossChallengeDetail({required this.challenge});
+
+  final _BossChallenge challenge;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      child: DecoratedBox(
+        key: ValueKey(challenge.label),
+        decoration: BoxDecoration(
+          color: AppColors.neonBlue.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppColors.plasmaPink.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                challenge.title,
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 18),
+              _BattlePowerMeter(power: challenge.power),
+              const SizedBox(height: 20),
+              _ProofBlock(title: 'Constraint', body: challenge.constraint),
+              _ProofBlock(title: 'Countermove', body: challenge.countermove),
+              _ProofBlock(title: 'Victory proof', body: challenge.proof),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _BattlePowerMeter extends StatelessWidget {
+  const _BattlePowerMeter({required this.power});
+
+  final double power;
+
+  @override
+  Widget build(BuildContext context) {
+    final percentage = (power * 100).round();
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: power),
+      duration: const Duration(milliseconds: 650),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Battle proof',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const Spacer(),
+                Text(
+                  '$percentage%',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.neonCyan,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: ColoredBox(
+                color: AppColors.deepSpace.withValues(alpha: 0.72),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: FractionallySizedBox(
+                    widthFactor: value.clamp(0, 1),
+                    child: const SizedBox(
+                      height: 14,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [AppColors.plasmaPink, AppColors.neonCyan],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
 class _ProofBlock extends StatelessWidget {
   const _ProofBlock({required this.title, required this.body});
 
@@ -1237,6 +1548,26 @@ class _AiMotionSignal {
   final String craft;
   final String proof;
   final double resonance;
+  final IconData icon;
+}
+
+class _BossChallenge {
+  const _BossChallenge({
+    required this.label,
+    required this.title,
+    required this.constraint,
+    required this.countermove,
+    required this.proof,
+    required this.power,
+    required this.icon,
+  });
+
+  final String label;
+  final String title;
+  final String constraint;
+  final String countermove;
+  final String proof;
+  final double power;
   final IconData icon;
 }
 
