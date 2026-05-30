@@ -40,6 +40,44 @@ void main() {
       expect(find.text('Quality gates'), findsOneWidget);
     });
 
+    testWidgets('renders interactive architecture layer explorer', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('architecture'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Interactive layer explorer'), findsOneWidget);
+      expect(find.text('Experience layer'), findsOneWidget);
+      expect(find.text('State'), findsOneWidget);
+      expect(find.text('Domain'), findsOneWidget);
+      expect(find.text('Data'), findsOneWidget);
+      expect(find.text('Quality'), findsOneWidget);
+    });
+
+    testWidgets('selecting an architecture layer updates details', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('architecture'));
+      await tester.pump(const Duration(seconds: 1));
+
+      await tester.ensureVisible(find.text('Data'));
+      await tester.pump();
+      await tester.tap(find.text('Data'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.text('Data layer'), findsOneWidget);
+      expect(
+        find.text('Repositories, DTOs, cache, API clients, platform bridges.'),
+        findsOneWidget,
+      );
+    });
+
     testWidgets('renders performance zone content', (tester) async {
       await tester.pumpWidget(buildSubject('performance'));
       await tester.pump(const Duration(seconds: 1));

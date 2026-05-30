@@ -45,6 +45,10 @@ class QuestZonePage extends StatelessWidget {
                     const SizedBox(height: 42),
                     _ZoneHero(node: node, content: content),
                     const SizedBox(height: 28),
+                    if (node.id == 'architecture') ...[
+                      const _ArchitectureLayerExplorer(),
+                      const SizedBox(height: 28),
+                    ],
                     _ZoneGrid(content: content),
                   ],
                 ),
@@ -211,6 +215,231 @@ class _ZoneGrid extends StatelessWidget {
   }
 }
 
+class _ArchitectureLayerExplorer extends StatefulWidget {
+  const _ArchitectureLayerExplorer();
+
+  @override
+  State<_ArchitectureLayerExplorer> createState() =>
+      _ArchitectureLayerExplorerState();
+}
+
+class _ArchitectureLayerExplorerState
+    extends State<_ArchitectureLayerExplorer> {
+  int _selectedIndex = 0;
+
+  static const _layers = [
+    _ArchitectureLayer(
+      label: 'Experience',
+      title: 'Experience layer',
+      summary: 'Widgets, motion, accessibility, responsive web shell.',
+      proof:
+          'Keeps product screens expressive while preserving readability, semantic structure, and responsive behavior.',
+      responsibilities: [
+        'Responsive Flutter Web composition',
+        'Game-inspired motion and feedback',
+        'Accessible CTAs and readable content hierarchy',
+      ],
+    ),
+    _ArchitectureLayer(
+      label: 'State',
+      title: 'State layer',
+      summary: 'Cubit/BLoC boundaries, effects, hydration-ready state.',
+      proof:
+          'Keeps user flows predictable and easy to test while separating UI rendering from interaction state.',
+      responsibilities: [
+        'QuestCubit selected-node state',
+        'Focused state transitions',
+        'bloc_test coverage for behavior',
+      ],
+    ),
+    _ArchitectureLayer(
+      label: 'Domain',
+      title: 'Domain layer',
+      summary: 'Use cases, policies, validation, business invariants.',
+      proof:
+          'Protects product rules from UI churn and keeps feature decisions explicit when apps scale.',
+      responsibilities: [
+        'Business rules and use-case orchestration',
+        'Validation and invariants',
+        'Framework-independent decisions',
+      ],
+    ),
+    _ArchitectureLayer(
+      label: 'Data',
+      title: 'Data layer',
+      summary: 'Repositories, DTOs, cache, API clients, platform bridges.',
+      proof:
+          'Creates seams for Firebase, REST, native APIs, local cache, and third-party SDK integrations.',
+      responsibilities: [
+        'Repository abstractions',
+        'DTO and model mapping',
+        'Cache, API, and platform integration boundaries',
+      ],
+    ),
+    _ArchitectureLayer(
+      label: 'Quality',
+      title: 'Quality layer',
+      summary: 'Widget tests, bloc tests, goldens, CI smoke checks.',
+      proof:
+          'Turns architecture into repeatable confidence through tests, browser validation, and release checks.',
+      responsibilities: [
+        'Widget and Cubit coverage',
+        'Browser validation across breakpoints',
+        'Analyze, test, and web build gates',
+      ],
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedLayer = _layers[_selectedIndex];
+
+    return _GlassCard(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final selector = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Interactive layer explorer',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Click a layer to inspect responsibilities, trade-offs, and proof.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 20),
+              Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  for (final layer in _layers.indexed)
+                    _LayerSelectorButton(
+                      label: layer.$2.label,
+                      isSelected: layer.$1 == _selectedIndex,
+                      onTap: () => setState(() => _selectedIndex = layer.$1),
+                    ),
+                ],
+              ),
+            ],
+          );
+
+          final detail = _LayerDetailCard(layer: selectedLayer);
+
+          if (constraints.maxWidth < 760) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [selector, const SizedBox(height: 22), detail],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 4, child: selector),
+              const SizedBox(width: 24),
+              Expanded(flex: 5, child: detail),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _LayerSelectorButton extends StatelessWidget {
+  const _LayerSelectorButton({
+    required this.label,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final String label;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.neonBlue.withValues(alpha: 0.22)
+            : Colors.transparent,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.neonCyan
+              : AppColors.neonBlue.withValues(alpha: 0.44),
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            child: Text(
+              label,
+              style: TextStyle(
+                color: AppColors.starWhite,
+                fontWeight: isSelected ? FontWeight.w900 : FontWeight.w700,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _LayerDetailCard extends StatelessWidget {
+  const _LayerDetailCard({required this.layer});
+
+  final _ArchitectureLayer layer;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      child: DecoratedBox(
+        key: ValueKey(layer.label),
+        decoration: BoxDecoration(
+          color: AppColors.neonBlue.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppColors.neonCyan.withValues(alpha: 0.18)),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(layer.title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 10),
+              Text(layer.summary, style: Theme.of(context).textTheme.bodyLarge),
+              const SizedBox(height: 18),
+              for (final responsibility in layer.responsibilities)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: _MetricLine(metric: responsibility),
+                ),
+              const SizedBox(height: 8),
+              Text(
+                layer.proof,
+                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  color: AppColors.starWhite.withValues(alpha: 0.82),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _ZoneSectionCard extends StatelessWidget {
   const _ZoneSectionCard({
     required this.index,
@@ -328,6 +557,22 @@ class _ZoneSection {
   final String title;
   final String body;
   final IconData icon;
+}
+
+class _ArchitectureLayer {
+  const _ArchitectureLayer({
+    required this.label,
+    required this.title,
+    required this.summary,
+    required this.proof,
+    required this.responsibilities,
+  });
+
+  final String label;
+  final String title;
+  final String summary;
+  final String proof;
+  final List<String> responsibilities;
 }
 
 _ZoneContent _contentFor(QuestNode node) {
