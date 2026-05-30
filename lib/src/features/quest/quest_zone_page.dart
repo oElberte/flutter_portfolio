@@ -53,6 +53,10 @@ class QuestZonePage extends StatelessWidget {
                       const _PerformanceForge(),
                       const SizedBox(height: 28),
                     ],
+                    if (node.id == 'animations') ...[
+                      const _AiMotionPortal(),
+                      const SizedBox(height: 28),
+                    ],
                     _ZoneGrid(content: content),
                   ],
                 ),
@@ -663,12 +667,9 @@ class _PerformanceMetricDetail extends StatelessWidget {
               const SizedBox(height: 18),
               _PerformanceEnergyBar(progress: metric.progress),
               const SizedBox(height: 20),
-              _PerformanceProofBlock(title: 'Problem', body: metric.problem),
-              _PerformanceProofBlock(
-                title: 'Optimization',
-                body: metric.optimization,
-              ),
-              _PerformanceProofBlock(title: 'Impact', body: metric.impact),
+              _ProofBlock(title: 'Problem', body: metric.problem),
+              _ProofBlock(title: 'Optimization', body: metric.optimization),
+              _ProofBlock(title: 'Impact', body: metric.impact),
             ],
           ),
         ),
@@ -740,8 +741,304 @@ class _PerformanceEnergyBar extends StatelessWidget {
   }
 }
 
-class _PerformanceProofBlock extends StatelessWidget {
-  const _PerformanceProofBlock({required this.title, required this.body});
+class _AiMotionPortal extends StatefulWidget {
+  const _AiMotionPortal();
+
+  @override
+  State<_AiMotionPortal> createState() => _AiMotionPortalState();
+}
+
+class _AiMotionPortalState extends State<_AiMotionPortal> {
+  int _selectedIndex = 0;
+
+  static const _signals = [
+    _AiMotionSignal(
+      label: 'LLM chatbot',
+      title: 'FAQ communication copilots',
+      intent:
+          'Reduce repetitive support friction while keeping users close to the right product answer.',
+      craft:
+          'LLM flows are shaped around scoped prompts, clear fallback paths, and UI that keeps the conversation readable.',
+      proof:
+          'MusicPlayce added an LLM chatbot for FAQ and user communication flows.',
+      resonance: 0.76,
+      icon: Icons.chat_bubble_outline,
+    ),
+    _AiMotionSignal(
+      label: 'Agent integrations',
+      title: 'Multi-step product agents',
+      intent:
+          'Turn complex user goals into guided steps without hiding constraints or product rules.',
+      craft:
+          'Agent-style flows combine intent capture, guardrails, stateful progress, and handoff points for high-scale apps.',
+      proof:
+          'Salsa work includes AI-driven features and multi-step agent integrations for mobile products.',
+      resonance: 0.84,
+      icon: Icons.hub,
+    ),
+    _AiMotionSignal(
+      label: 'Commerce AI',
+      title: 'AI commerce suggestions',
+      intent:
+          'Help shoppers discover better product paths while improving commerce platform efficiency.',
+      craft:
+          'AI/LLM features are connected to Shopify portal work, embeddable product carousels, and optimized data access.',
+      proof:
+          'Zellor AI delivered 50% query improvement, 30% lower storage costs, 15%+ sales lift, and 20% cost reduction.',
+      resonance: 0.88,
+      icon: Icons.auto_awesome,
+    ),
+    _AiMotionSignal(
+      label: 'Discovery + motion',
+      title: 'Search, deep links, and motion polish',
+      intent:
+          'Make discovery feel fast, directed, and memorable across search, links, and app transitions.',
+      craft:
+          'Algolia search, Branch.io deep links, responsive cards, particles, and motion cues are kept behind maintainable Flutter composition.',
+      proof:
+          'MusicPlayce improved discovery with Algolia and Branch.io while boosting engagement by 23%.',
+      resonance: 0.72,
+      icon: Icons.auto_awesome_motion,
+    ),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final selectedSignal = _signals[_selectedIndex];
+
+    return _GlassCard(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final selector = Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Interactive AI + motion portal',
+                style: Theme.of(context).textTheme.headlineMedium,
+              ),
+              const SizedBox(height: 12),
+              Text(
+                'Choose a signal to inspect intent, implementation craft, and product proof behind each AI or motion capability.',
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+              const SizedBox(height: 20),
+              LayoutBuilder(
+                builder: (context, gridConstraints) {
+                  final cardWidth = gridConstraints.maxWidth < 620
+                      ? gridConstraints.maxWidth
+                      : (gridConstraints.maxWidth - 12) / 2;
+
+                  return Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    children: [
+                      for (final signal in _signals.indexed)
+                        SizedBox(
+                          width: cardWidth,
+                          child: _AiMotionSignalCard(
+                            signal: signal.$2,
+                            isSelected: signal.$1 == _selectedIndex,
+                            onTap: () =>
+                                setState(() => _selectedIndex = signal.$1),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
+          );
+
+          final detail = _AiMotionSignalDetail(signal: selectedSignal);
+
+          if (constraints.maxWidth < 900) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [selector, const SizedBox(height: 22), detail],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(flex: 5, child: selector),
+              const SizedBox(width: 24),
+              Expanded(flex: 4, child: detail),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _AiMotionSignalCard extends StatelessWidget {
+  const _AiMotionSignalCard({
+    required this.signal,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  final _AiMotionSignal signal;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? AppColors.neonViolet.withValues(alpha: 0.2)
+            : AppColors.neonBlue.withValues(alpha: 0.06),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: isSelected
+              ? AppColors.plasmaPink
+              : AppColors.neonCyan.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(signal.icon, color: AppColors.neonCyan),
+                const SizedBox(height: 14),
+                Text(
+                  signal.label,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(color: AppColors.starWhite),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  signal.title,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.starWhite.withValues(alpha: 0.74),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AiMotionSignalDetail extends StatelessWidget {
+  const _AiMotionSignalDetail({required this.signal});
+
+  final _AiMotionSignal signal;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 220),
+      child: DecoratedBox(
+        key: ValueKey(signal.label),
+        decoration: BoxDecoration(
+          color: AppColors.neonBlue.withValues(alpha: 0.08),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(
+            color: AppColors.neonViolet.withValues(alpha: 0.3),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(signal.title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 18),
+              _PortalPulseTrack(resonance: signal.resonance),
+              const SizedBox(height: 20),
+              _ProofBlock(title: 'Intent', body: signal.intent),
+              _ProofBlock(title: 'Craft', body: signal.craft),
+              _ProofBlock(title: 'Proof', body: signal.proof),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PortalPulseTrack extends StatelessWidget {
+  const _PortalPulseTrack({required this.resonance});
+
+  final double resonance;
+
+  @override
+  Widget build(BuildContext context) {
+    final percentage = (resonance * 100).round();
+
+    return TweenAnimationBuilder<double>(
+      tween: Tween<double>(begin: 0, end: resonance),
+      duration: const Duration(milliseconds: 650),
+      curve: Curves.easeOutCubic,
+      builder: (context, value, child) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'Portal resonance',
+                  style: Theme.of(context).textTheme.labelLarge,
+                ),
+                const Spacer(),
+                Text(
+                  '$percentage%',
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: AppColors.neonCyan,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(99),
+              child: ColoredBox(
+                color: AppColors.deepSpace.withValues(alpha: 0.72),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: FractionallySizedBox(
+                    widthFactor: value.clamp(0, 1),
+                    child: const SizedBox(
+                      height: 14,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              AppColors.neonViolet,
+                              AppColors.neonCyan,
+                              AppColors.plasmaPink,
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ProofBlock extends StatelessWidget {
+  const _ProofBlock({required this.title, required this.body});
 
   final String title;
   final String body;
@@ -920,6 +1217,26 @@ class _PerformanceMetric {
   final String optimization;
   final String impact;
   final double progress;
+  final IconData icon;
+}
+
+class _AiMotionSignal {
+  const _AiMotionSignal({
+    required this.label,
+    required this.title,
+    required this.intent,
+    required this.craft,
+    required this.proof,
+    required this.resonance,
+    required this.icon,
+  });
+
+  final String label;
+  final String title;
+  final String intent;
+  final String craft;
+  final String proof;
+  final double resonance;
   final IconData icon;
 }
 

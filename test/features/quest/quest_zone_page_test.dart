@@ -131,6 +131,54 @@ void main() {
       );
     });
 
+    testWidgets('renders animations zone content', (tester) async {
+      await tester.pumpWidget(buildSubject('animations'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('AI + Motion Portal Zone'), findsOneWidget);
+      expect(
+        find.text('AI-enabled product work with polished Flutter experiences.'),
+        findsOneWidget,
+      );
+      expect(find.text('AI flows'), findsOneWidget);
+      expect(find.text('Discovery'), findsOneWidget);
+      expect(find.text('Motion system'), findsOneWidget);
+    });
+
+    testWidgets('renders interactive AI + motion portal', (tester) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('animations'));
+      await tester.pump(const Duration(seconds: 1));
+
+      expect(find.text('Interactive AI + motion portal'), findsOneWidget);
+      expect(find.text('LLM chatbot'), findsOneWidget);
+      expect(find.text('Agent integrations'), findsWidgets);
+      expect(find.text('Commerce AI'), findsOneWidget);
+      expect(find.text('Discovery + motion'), findsOneWidget);
+      expect(find.text('Intent'), findsOneWidget);
+      expect(find.text('Craft'), findsOneWidget);
+      expect(find.text('Proof'), findsOneWidget);
+    });
+
+    testWidgets('selecting an AI + motion signal updates details', (
+      tester,
+    ) async {
+      await tester.binding.setSurfaceSize(const Size(1200, 1000));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      await tester.pumpWidget(buildSubject('animations'));
+      await tester.pump(const Duration(seconds: 1));
+
+      await tester.ensureVisible(find.text('Commerce AI'));
+      await tester.pump();
+      await tester.tap(find.text('Commerce AI'));
+      await tester.pump(const Duration(milliseconds: 300));
+
+      expect(find.textContaining('50% query improvement'), findsOneWidget);
+    });
+
     testWidgets('Back to Quest navigates home', (tester) async {
       await tester.pumpWidget(buildSubject('architecture'));
       await tester.pump(const Duration(seconds: 1));
