@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -81,6 +82,11 @@ class _QuickHeader extends StatelessWidget {
           icon: const Icon(Icons.send),
           label: const Text('Contact'),
         ),
+        OutlinedButton.icon(
+          onPressed: () => _copyEmail(context),
+          icon: const Icon(Icons.copy),
+          label: const Text('Copy email'),
+        ),
       ],
     );
   }
@@ -148,6 +154,13 @@ class _HeroSummary extends StatelessWidget {
                   _SignalChip(label: 'CI/CD'),
                 ],
               ),
+              const SizedBox(height: 24),
+              Text(
+                'Best fit for teams that need',
+                style: Theme.of(context).textTheme.titleLarge,
+              ),
+              const SizedBox(height: 12),
+              const _RecruiterFitList(),
             ],
           ),
         );
@@ -432,6 +445,11 @@ class _ContactPortal extends StatelessWidget {
                 label: const Text('Email'),
               ),
               OutlinedButton.icon(
+                onPressed: () => _copyEmail(context),
+                icon: const Icon(Icons.copy),
+                label: const Text('Copy email'),
+              ),
+              OutlinedButton.icon(
                 onPressed: () => _open(Uri.parse(PortfolioContent.githubUrl)),
                 icon: const Icon(Icons.code),
                 label: const Text('GitHub'),
@@ -518,6 +536,46 @@ class _GlassCard extends StatelessWidget {
   }
 }
 
+class _RecruiterFitList extends StatelessWidget {
+  const _RecruiterFitList();
+
+  static const items = [
+    'Specialist Flutter architecture with measurable delivery impact.',
+    'AI-enabled mobile product features that stay maintainable.',
+    'Performance, CI/CD, mentoring, and production-quality execution.',
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final item in items)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(
+                  Icons.check_circle,
+                  color: AppColors.neonCyan,
+                  size: 18,
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    item,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 class _SignalChip extends StatelessWidget {
   const _SignalChip({required this.label});
 
@@ -536,4 +594,16 @@ Future<void> _open(Uri uri) async {
         ? LaunchMode.externalApplication
         : LaunchMode.platformDefault,
   );
+}
+
+Future<void> _copyEmail(BuildContext context) async {
+  await Clipboard.setData(const ClipboardData(text: PortfolioContent.email));
+
+  if (!context.mounted) {
+    return;
+  }
+
+  ScaffoldMessenger.of(
+    context,
+  ).showSnackBar(const SnackBar(content: Text('Email copied to clipboard')));
 }

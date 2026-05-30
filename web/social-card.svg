@@ -1,0 +1,17 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#050711"/>
+  <circle cx="1030" cy="120" r="240" fill="#41A7FF" fill-opacity="0.18"/>
+  <circle cx="180" cy="520" r="260" fill="#9B5CFF" fill-opacity="0.18"/>
+  <path d="M120 472C284 316 410 348 542 236C655 140 768 118 1010 154" stroke="#4DF5FF" stroke-width="4" stroke-linecap="round" stroke-opacity="0.55"/>
+  <rect x="84" y="78" width="1032" height="474" rx="48" fill="#09111F" fill-opacity="0.78" stroke="#4DF5FF" stroke-opacity="0.32" stroke-width="2"/>
+  <text x="132" y="164" fill="#4DF5FF" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" letter-spacing="4">FLUTTER ENGINEER QUEST</text>
+  <text x="132" y="270" fill="#EAF7FF" font-family="Arial, Helvetica, sans-serif" font-size="74" font-weight="900">Elberte Plínio</text>
+  <text x="132" y="340" fill="#EAF7FF" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="800">Flutter Specialist • AI Engineer</text>
+  <text x="132" y="420" fill="#9FB4C8" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="500">Architecture, performance, AI product work, and production mobile impact.</text>
+  <rect x="132" y="466" width="176" height="48" rx="24" fill="#41A7FF" fill-opacity="0.18" stroke="#41A7FF"/>
+  <text x="160" y="498" fill="#EAF7FF" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800">BLoC/Cubit</text>
+  <rect x="328" y="466" width="168" height="48" rx="24" fill="#9B5CFF" fill-opacity="0.18" stroke="#9B5CFF"/>
+  <text x="356" y="498" fill="#EAF7FF" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800">AI + LLMs</text>
+  <rect x="516" y="466" width="172" height="48" rx="24" fill="#4DF5FF" fill-opacity="0.14" stroke="#4DF5FF"/>
+  <text x="544" y="498" fill="#EAF7FF" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="800">CI/CD</text>
+</svg>

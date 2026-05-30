@@ -1,12 +1,19 @@
 {
     "name": "Elberte Plínio | Flutter Engineer Quest",
     "short_name": "Elberte Quest",
+    "id": ".",
     "start_url": ".",
+    "scope": ".",
     "display": "standalone",
     "background_color": "#050711",
     "theme_color": "#41A7FF",
+    "lang": "en",
+    "categories": [
+        "business",
+        "portfolio",
+        "productivity"
+    ],
     "description": "Interactive Flutter portfolio for Elberte Plínio, Flutter Specialist, Software Engineer, and AI Engineer.",
-    "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {

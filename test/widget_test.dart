@@ -26,6 +26,8 @@ void main() {
 
     expect(find.text('Quick Scan Mode'), findsOneWidget);
     expect(find.text('Interactive Architecture Lab'), findsOneWidget);
+    expect(find.text('Best fit for teams that need'), findsOneWidget);
+    expect(find.text('Copy email'), findsWidgets);
   });
 
   testWidgets('quest nodes select first and enter dedicated zones', (
