@@ -6,8 +6,8 @@ abstract final class PortfolioContent {
   static const title = 'Flutter Specialist | Software Engineer | AI Engineer';
   static const location = 'Goiânia, GO, Brazil';
   static const email = 'elberte.dev@gmail.com';
-  static const githubUrl = 'https://github.com/oElberte';
-  static const linkedInUrl = 'https://www.linkedin.com/in/oelberte/';
+  static const githubUrl = 'https://github.com/ElbertePlinio';
+  static const linkedInUrl = 'https://www.linkedin.com/in/ElbertePlinio/';
   static const portfolioUrl = 'https://elberte.com/';
   static const whatsAppUrl = 'https://wa.me/5534991355629';
   static const resumeUrl = '/cv/elberte-plinio.pdf';
@@ -159,7 +159,7 @@ abstract final class PortfolioContent {
       impact:
           'Demonstrates end-to-end Flutter app structure, practical cloud integration, and production-inspired feature organization.',
       stack: ['Flutter', 'Firebase', 'GCP', 'MySQL', 'MobX'],
-      externalUrl: 'https://github.com/oElberte/cuidapet',
+      externalUrl: 'https://github.com/ElbertePlinio/cuidapet',
     ),
     ProjectSpotlight(
       id: 'delivery-app',
@@ -173,7 +173,7 @@ abstract final class PortfolioContent {
       impact:
           'Demonstrates disciplined Flutter architecture and testable app boundaries in a familiar product domain.',
       stack: ['Flutter', 'Dart', 'Clean Architecture', 'BLoC'],
-      externalUrl: 'https://github.com/oElberte/delivery-app',
+      externalUrl: 'https://github.com/ElbertePlinio/delivery-app',
     ),
     ProjectSpotlight(
       id: 'clean-pokedex',
@@ -187,7 +187,8 @@ abstract final class PortfolioContent {
       impact:
           'Shows growth from first Flutter experiments into specialist-level architecture and quality habits.',
       stack: ['Flutter', 'Clean Architecture', 'TDD', 'CI/CD'],
-      externalUrl: 'https://github.com/oElberte/pokedex-clean-architecture',
+      externalUrl:
+          'https://github.com/ElbertePlinio/pokedex-clean-architecture',
     ),
   ];
 
