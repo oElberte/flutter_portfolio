@@ -1,17 +1,9 @@
-# flutter_engineer_quest
+Flutter Web portfolio with Quest Mode and recruiter-friendly Quick Scan. Use Flutter and Dart directly; this repo has no `.fvmrc`.
 
-Flutter Web portfolio for elberte.com, with a Quest Mode skill map and a Quick Scan mode. Content is static and typed in `lib/src/data`. No backend, no DI, no codegen.
+Keep Flame atmospheric and background-only. Portfolio UI and interactions stay in Flutter widgets. Keep typed content in `lib/src/data`, quest-node selection in `QuestCubit`, and navigation and deep links in `go_router`. Intro, hover and parallax state stay local to Quest Mode. Preserve route paths and existing test keys.
 
-```
-flutter pub get
-flutter run -d web-server --web-hostname 0.0.0.0 --web-port 8080
-dart format lib test && flutter analyze && flutter test && flutter build web
-```
+Keep the glass/neon visual language, responsive breakpoints and small widgets. Motion must not block navigation or hide content when reduced motion is enabled. Do not add dependencies, backend services, analytics or network-driven content for the home-map upgrade. Quick Scan and quest zones are outside that upgrade unless fixing a regression. When a local `docs/portfolio-plan.md` is present, preserve its product constraints.
 
-Things worth knowing:
+For layout or motion changes, check the affected routes at `390x844`, `768x1024`, `1024x768` and `1440x1000`, including keyboard navigation and reduced motion. Use widget/navigation tests for changed UI behavior and Cubit tests for selection changes; a web build is relevant to web integration changes, not every handoff.
 
-- Widget tests find things by `ValueKey` (`quick-scan-button`, `quest-node-*`, `enter-zone-button`). Keep those keys when you move widgets.
-- Quest cards select a node and don't navigate. The selected-node panel owns "Enter zone". That's on purpose.
-- Flame only draws the animated background. Text, cards and CTAs stay Flutter widgets so they're testable and accessible.
-- `test/launch_readiness_test.dart` asserts the exact SEO, manifest and sitemap strings in `web/`. New public routes go in `web/sitemap.xml` too.
-- For layout changes, look at it in a browser at 390x844, 768x1024, 1024x768 and 1440x1000 and save screenshots to `.factory/tests/assets/screenshots/`.
+Save new browser evidence outside the repo, under `~/Artifacts/3d_portfolio/`. Preserve existing screenshots, including any historical `.factory/tests/assets/screenshots/` evidence; that directory is not the destination for new captures. Do not add docs or READMEs unless requested.
